@@ -4,25 +4,25 @@ services:
   postgres:
     build: postgres-with-pgloader
     volumes:
-      - /var/lib/postgresql/data
+      - postgres:/var/lib/postgresql/data
     environment:
       POSTGRES_PASSWORD: password
 
   mysql:
     image: mysql:5.7
     volumes:
-      - /var/lib/mysql
+      - mysql:/var/lib/mysql
       - ./migrations:/docker-entrypoint-initdb.d
     environment:
       MYSQL_DATABASE: database
       MYSQL_USER: user
       MYSQL_PASSWORD: password
       MYSQL_ROOT_PASSWORD: password
-  
+
   pgadmin:
     image: dpage/pgadmin4
     volumes:
-      - /var/lib/pgadmin
+      - pgadmin:/var/lib/pgadmin
     environment:
       PGADMIN_DEFAULT_EMAIL: pgadmin4@pgadmin.org
       PGADMIN_DEFAULT_PASSWORD: admin
@@ -30,10 +30,18 @@ services:
       PGADMIN_CONFIG_MASTER_PASSWORD_REQUIRED: "False"
     ports:
       - "5050:80"
-  
+
   phpmyadmin:
     image: phpmyadmin
     ports:
       - "8888:80"
     environment:
       PMA_ARBITRARY: 1
+
+volumes:
+  mysql: null
+  postgres: null
+  pgadmin: null
+
+networks:
+  mysql2pgsql: null
